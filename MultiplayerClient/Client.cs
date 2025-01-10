@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,8 +7,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace MultiplayerClient
 {
@@ -19,17 +16,12 @@ namespace MultiplayerClient
         private static int port;
         private static IPEndPoint serverEndPoint;
 
-        public static string guid;
         private static UdpClient client;
-
-        public static Dictionary<string, Vector2> players = [];
 
         public static void Connect()
         {
             address = IPAddress.Parse("127.0.0.1");
             port = 11000;
-
-            guid = Guid.NewGuid().ToString();
 
             serverEndPoint = new IPEndPoint(address, port);
 
@@ -63,7 +55,7 @@ namespace MultiplayerClient
             }
             catch (Exception ex)
             {
-                Game1.text += "Client error: " + ex.Message + "\n";
+                Game1.text = "Client error: " + ex.Message + "\n";
                 Debug.WriteLine(ex);
             }
         }

@@ -67,11 +67,11 @@ namespace MultiplayerTest
 
             _spriteBatch.DrawString(font, Text, new Vector2(30, 10), Color.White);
 
-            // Server
-            _spriteBatch.Draw(playerTexture, otherPlayerPosition, null, Color.White,
+            // Client
+            _spriteBatch.Draw(playerTexture, otherPlayerPosition, null, Color.White * .5f,
                 0f, Vector2.Zero, 3, SpriteEffects.None, 0);
 
-            // Client (This)
+            // Server (This)
             _spriteBatch.Draw(playerTexture, playerPosition, null, Color.White,
                 0f, Vector2.Zero, 3, SpriteEffects.None, 0);
 

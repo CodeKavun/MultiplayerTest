@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,7 +8,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace MultiplayerTest
 {
@@ -21,8 +19,6 @@ namespace MultiplayerTest
         private static Thread serverThread;
 
         private static bool isRunning = false;
-
-        public static Dictionary<string, Vector2> players = [];
 
         public static void Start()
         {
@@ -56,11 +52,13 @@ namespace MultiplayerTest
 
                         listener.Send(bytes, bytes.Length, endPoint);
                     }
+
+                    Thread.Sleep(5);
                 }
             }
             catch (Exception ex)
             {
-                Game1.Text += "Server fault:\n" + ex.Message + "\n";
+                Game1.Text = "Server fault:\n" + ex.Message + "\n";
                 Debug.WriteLine(ex);
             }
         }
@@ -85,14 +83,7 @@ namespace MultiplayerTest
         public static void Stop()
         {
             isRunning = false;
-
             listener?.Close();
-
-            //lock (clients)
-            //{
-            //    foreach (UdpClient client in clients) client.Close();
-            //    clients.Clear();
-            //}
         }
     }
 }

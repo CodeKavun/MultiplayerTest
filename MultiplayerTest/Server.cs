@@ -25,11 +25,11 @@ namespace MultiplayerTest
             port = 11000;
 
             isRunning = true;
-            serverThread = new Thread(StartListening);
+            serverThread = new Thread(Handle);
             serverThread.Start();
         }
 
-        private static void StartListening()
+        private static void Handle()
         {
             try
             {
@@ -52,8 +52,6 @@ namespace MultiplayerTest
 
                         listener.Send(bytes, bytes.Length, endPoint);
                     }
-
-                    Thread.Sleep(5);
                 }
             }
             catch (Exception ex)

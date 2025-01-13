@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 
 namespace MultiplayerClient
 {
@@ -17,6 +18,9 @@ namespace MultiplayerClient
         private static IPEndPoint serverEndPoint;
 
         private static UdpClient client;
+        private static Thread clientThread;
+
+        private static bool isRunning = false;
 
         public static void Connect()
         {
@@ -25,32 +29,33 @@ namespace MultiplayerClient
 
             serverEndPoint = new IPEndPoint(address, port);
 
-            try
-            {
-                client = new UdpClient();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
+            isRunning = true;
+
+            clientThread = new Thread(Handle);
+            clientThread.Start();
         }
 
-        public static void Handle()
+        private static void Handle()
         {
             try
             {
-                byte[] messageData = Encoding.UTF8.GetBytes(PlayerToMessage());
-                client.Send(messageData, messageData.Length, serverEndPoint);
+                client = new UdpClient();
 
-                if (client.Available > 0)
+                while (isRunning)
                 {
-                    IPEndPoint remoteEndPoint = null;
-                    byte[] received = client.Receive(ref remoteEndPoint);
+                    byte[] messageData = Encoding.UTF8.GetBytes(PlayerToMessage());
+                    client.Send(messageData, messageData.Length, serverEndPoint);
 
-                    string message = Encoding.UTF8.GetString(received, 0, received.Length);
-                    MessageToPlayer(message);
+                    if (client.Available > 0)
+                    {
+                        IPEndPoint remoteEndPoint = null;
+                        byte[] received = client.Receive(ref remoteEndPoint);
 
-                    Game1.text = message;
+                        string message = Encoding.UTF8.GetString(received, 0, received.Length);
+                        MessageToPlayer(message);
+
+                        Game1.text = message;
+                    }
                 }
             }
             catch (Exception ex)
@@ -79,6 +84,7 @@ namespace MultiplayerClient
 
         public static void Close()
         {
+            isRunning = false;
             client?.Close();
         }
     }

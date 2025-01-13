@@ -63,7 +63,7 @@ namespace MultiplayerClient
             }
 
             // TODO: Add your update logic here
-            Client.Handle();
+            //Client.Handle();
 
             if (keyboardState.IsKeyDown(Keys.A)) playerPosition.X -= (float)gameTime.ElapsedGameTime.TotalSeconds * speed;
             if (keyboardState.IsKeyDown(Keys.D)) playerPosition.X += (float)gameTime.ElapsedGameTime.TotalSeconds * speed;
